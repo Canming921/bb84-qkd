@@ -89,24 +89,5 @@ bb84-qkd/
 4. **对基筛选** — 双方公开比对基（不公开比特值），仅保留基一致的位置 → 筛后密钥。
 5. **QBER 估计** — 在筛后密钥上统计不一致比例；超过 ~11% 即判定信道被窃听并丢弃密钥。
 
----
-
-## 对应评分维度
-
-| 评分维度 | 本仓库覆盖 |
-|---|---|
-| 工程规范 / README / CI-CD | 模块化 `bb84/` 包、`requirements.txt`、GitHub Actions、MIT 协议 |
-| 物理机制解析（狄拉克符号） | [`docs/PHYSICS.md`](docs/PHYSICS.md) 全程推导，代码注释标注物理对应 |
-| 算法架构 | 角色分层 + 态/测量底层 + 协议编排三层解耦 |
-| AI 协同声明 | [`AI-Collaboration.md`](AI-Collaboration.md) |
-| 提交周期 / 社区互动 | 见下方"作者待办" |
-
-### 作者待办（需你本人完成，无法由代码替代）
-- [ ] **分阶段提交**：按 qubit → parties → protocol → tests → docs 的顺序多次 commit，体现持续开发（避免一次性提交触发"AI 一键生成"扣分）。
-- [ ] 把 `docs/PHYSICS.md` 内容同步到仓库 **Wiki**。
-- [x] README 用户名已填好 (Canming921)。
-- [ ] 按你**真实**的使用情况补全 `AI-Collaboration.md`。
-- [ ] 推广仓库、回应 Issues/PR 以累积 Stars/Forks（社区分）。
-
 ## License
 MIT
