@@ -11,9 +11,9 @@ BB84 用单量子比特的两组**互无偏基 (mutually unbiased bases, MUB)** 
 
 **直角基 / 计算基 (Z, "+")：**
 
-$$|0\rangle = \begin{pmatrix}1\\0\end{pmatrix}, \qquad |1\rangle = \begin{pmatrix}0\\1\end{pmatrix}$$
+$$|0\rangle = \binom{1}{0}, \qquad |1\rangle = \binom{0}{1}$$
 
-**对角基 (X, "×")：** 由 Hadamard 变换 $H=\tfrac{1}{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}$ 作用于计算基得到：
+**对角基 (X, "×")：** 由 Hadamard 变换 $H$ 作用于计算基得到：
 
 $$|+\rangle = H|0\rangle = \tfrac{1}{\sqrt2}\big(|0\rangle+|1\rangle\big), \qquad
 |-\rangle = H|1\rangle = \tfrac{1}{\sqrt2}\big(|0\rangle-|1\rangle\big)$$
@@ -30,7 +30,7 @@ $$\big|\langle 0|+\rangle\big|^2 = \big|\langle 1|+\rangle\big|^2 = \big|\langle
 
 ## 2. Alice 的态制备
 
-Alice 随机抽取比特 $a\in\{0,1\}$ 与基 $\theta\in\{Z,X\}$，制备：
+Alice 随机抽取比特 $a\in\lbrace 0,1\rbrace$ 与基 $\theta\in\lbrace Z,X\rbrace$，制备：
 
 | 比特 \\ 基 | $Z$ | $X$ |
 |:---:|:---:|:---:|
@@ -43,14 +43,14 @@ Alice 随机抽取比特 $a\in\{0,1\}$ 与基 $\theta\in\{Z,X\}$，制备：
 
 ## 3. 投影测量与玻恩定则
 
-在基 $\{|e_0\rangle,|e_1\rangle\}$ 下测量态 $|\psi\rangle$，得到结果 $k$ 的概率由**玻恩定则**给出：
+在基 $\lbrace\lvert e_0\rangle,\lvert e_1\rangle\rbrace$ 下测量态 $\lvert\psi\rangle$，得到结果 $k$ 的概率由**玻恩定则**给出：
 
 $$P(k) = \big|\langle e_k|\psi\rangle\big|^2, \qquad |\psi\rangle \xrightarrow{\text{测量}} |e_k\rangle$$
 
 测量后态**坍缩**到对应本征态，原始叠加信息不可逆地丢失。
 
-- **基匹配**（测量基 = 制备基）：例如对 $|1\rangle$ 在 $Z$ 基测量，$P(1)=|\langle1|1\rangle|^2=1$，结果**确定**。
-- **基失配**：例如对 $|0\rangle$ 在 $X$ 基测量，$P(\pm)=|\langle\pm|0\rangle|^2=\tfrac12$，结果**纯随机**，且态坍缩，原信息丢失。
+- **基匹配**（测量基 = 制备基）：例如对 $\lvert 1\rangle$ 在 $Z$ 基测量， $P(1)=\lvert\langle 1\vert 1\rangle\rvert^2=1$，结果**确定**。
+- **基失配**：例如对 $\lvert 0\rangle$ 在 $X$ 基测量， $P(\pm)=\lvert\langle\pm\vert 0\rangle\rvert^2=\tfrac12$，结果**纯随机**，且态坍缩，原信息丢失。
 
 代码对应：`measure()` 用 `p0 = |<e0|psi>|^2 = abs(np.vdot(e0, state))**2` 严格实现玻恩定则——25% 的误码率是**涌现**出来的，并非写死。
 
@@ -72,11 +72,11 @@ $$\text{筛后密钥长度} \approx \tfrac12 \times n$$
 
 ## 5. Eve 的截获-重发攻击 (Intercept-Resend)
 
-Eve 不知道 Alice 用的基。她在随机基 $\phi\in\{Z,X\}$ 下测量截获的量子比特（导致坍缩），再把坍缩后的态重新发给 Bob。
+Eve 不知道 Alice 用的基。她在随机基 $\phi\in\lbrace Z,X\rbrace$ 下测量截获的量子比特（导致坍缩），再把坍缩后的态重新发给 Bob。
 
 **关键约束——不可克隆定理：** 未知量子态无法被完美复制：
 
-$$\nexists\,\hat U:\quad \hat U\,|\psi\rangle|0\rangle = |\psi\rangle|\psi\rangle \quad \forall|\psi\rangle$$
+$$\nexists \hat U:\quad \hat U |\psi\rangle|0\rangle = |\psi\rangle|\psi\rangle \quad \forall|\psi\rangle$$
 
 因此 Eve 无法"复制后放行"，只能测量，而测量必然以一定概率扰动态——这正是窃听被探测的物理来源。
 
@@ -98,13 +98,15 @@ $$P(\text{error}\mid \phi\neq\theta)=\tfrac12$$
 
 合并：
 
-$$\boxed{\;\text{QBER} = \tfrac12\cdot 0 + \tfrac12\cdot\tfrac12 = \tfrac14 = 25\%\;}$$
+$$\boxed{\text{QBER} = \tfrac12\cdot 0 + \tfrac12\cdot\tfrac12 = \tfrac14}$$
+
+即 $\text{QBER}=\tfrac14$，约 **25%**。
 
 **部分窃听**（Eve 以概率 $p$ 截获）线性缩放：
 
 $$\text{QBER}(p) = \frac{p}{4}$$
 
-代码对应：`BB84Result.theoretical_qber` 返回 $p_{eve}/4$；仿真结果（$n=5\times10^4$）为 $0.2499$ 与 $0.1253$，与理论 $0.25 / 0.125$ 高度吻合。
+代码对应：BB84Result.theoretical_qber 返回 $p_{eve}/4$；在 $n=5\times10^4$ 时仿真结果为 $0.2499$ 与 $0.1253$，与理论 $0.25 / 0.125$ 高度吻合。
 
 ---
 
@@ -112,7 +114,7 @@ $$\text{QBER}(p) = \frac{p}{4}$$
 
 无噪理想信道下，任何 $\text{QBER}>0$ 都暴露窃听。考虑实际信道噪声，BB84 配合常用纠错+隐私放大方案的安全阈值约为 **11%**：
 
-$$\text{QBER} \lesssim 11\% \;\Rightarrow\; \text{可提取安全密钥}; \qquad \text{QBER} > 11\% \;\Rightarrow\; \text{丢弃密钥}$$
+$$\text{QBER} \lesssim 0.11 \Rightarrow \text{可提取安全密钥}, \qquad \text{QBER} > 0.11 \Rightarrow \text{丢弃密钥}$$
 
 全程截获-重发产生 25% $\gg$ 11%，故该攻击必然被发现——这就是 BB84 "可探测窃听"的核心保证。
 
